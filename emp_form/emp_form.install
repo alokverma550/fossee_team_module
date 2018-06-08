@@ -1,0 +1,71 @@
+<?php
+/** 
+	* Impliment the fileds of the employee.
+		* First Name, Last Name, Emp ID(primary_key), Emp des. 
+	*Impliment the Database from Schema
+*/
+
+function emp_form_schema() {
+
+	// Impliment the store the above the employee data
+
+	$schema['emp_form_data'] = array(
+		'description' => t('A table which hold the employee data'),
+		'fields' => array(
+
+			'tid' => array(
+        	'description' => 'The primary identifier for a type.',
+        	'type' => 'serial',
+        	'unsigned' => TRUE,
+        	'not null' => TRUE),
+
+			'emp_id' => array(
+			'description' => t('Employee Code'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => TRUE,
+			),
+
+			'first_name' => array(
+			'description' => t('Employee\'s first name.'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => TRUE,
+			),
+
+			'middle_name' => array(
+			'description' => t('Employee\'s middle name.'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => TRUE,
+			),
+
+			'last_name' => array(
+			'description' => t('Employee\'s last name.'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => TRUE,
+			),
+
+			'emp_des' => array(
+			'description' => t('Employee\'s Designation.'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => TRUE,
+			),
+		
+	),
+		'primary key' => array('tid'),
+	);
+	return $schema;
+}
+
+/**
+	* Impliment the hook install
+*/
+
+
+/**
+	* We can not create here hook uninstall because if create it and
+	* uninstall emp_form module then delete emp_form database
+*/
