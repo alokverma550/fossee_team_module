@@ -233,17 +233,5 @@ function view_emp() {
 		);
 	}
 
-	for ($i ..) {
-		$form[...]
-		$form['items']["delete$i"] array(
-			'#type' => 'submit',
-			'#name' => 'remove$i',
-			'#value' => t('Delete'),
-			'#indx' => $i,
-			'#submit' => ''
-
-		)
-	}
-
 	return theme('table', array('header'=>$header, 'rows'=>$rows));
 }
