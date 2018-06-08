@@ -1,0 +1,10 @@
+name = Employee Form
+description = Add details of employee details
+core = 7.x
+package = Employee Form
+
+# List of files included in the module
+
+files[] = emp_form.info
+files[] = emp_form.install
+files[] = emp_form.module
