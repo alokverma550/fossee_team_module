@@ -1,0 +1,249 @@
+<?php
+/**
+	* impliments hook_help()
+	*
+	* @param path
+*/
+function emp_form_help($path, $arg) {
+	switch ($path) {
+		case "admin/help#emp_form":
+			return t("Display links to nodes created on this date click here for github");
+			break;
+	}
+}
+
+//*********** Employee Form Menus**************
+
+function emp_form_menu() {
+	$items = array();
+	// setup url */emp_form
+	$items['emp_form/add'] = array(
+		'title' => 'Employee Form',
+		'type' => MENU_LOCAL_TASK,
+		'description' => 'fill the emp details',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('emp_form_my_form'),
+		'access arguments' => array('submit emp_form'),
+	);
+
+	$items['emp_form/view'] = array(
+		'title' => 'List of Employee',
+		'type' => MENU_LOCAL_TASK,
+		'description' => 'fill the emp details',
+		'page callback' => 'view_emp',
+		'access arguments' => array('view view_emp'),
+	);
+	$items['emp_form/upload'] = array(
+		'title' => 'Upload CSV File',
+		'type' => MENU_LOCAL_TASK,
+		'description' => 'Choose CSV File',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('upload_csv'),
+		'access arguments' => array('upload upload_csv'),
+	);
+
+        //******************** Sorting **********************
+
+		$items['emp_form/view?order=field_emp_id&sort=desc'] = array(
+		'title' => 'List of Employee',
+		'type' => MENU_LOCAL_TASK,
+		'description' => 'Order By Employee ID',
+		'page callback' => 'view_emp',
+		'access arguments' => array('view view_emp'),
+	);
+
+	return $items;
+}
+
+//*********** Employee Form permission **************
+
+function emp_form_permission() {
+	return array(
+		'submit emp_form' => array(
+			'title' => t('submit emp_form'),
+			'description' => t('Submit the emp_form form'),
+		),
+
+		'view view_emp_form' => array(
+			'title' => t('View Form'),
+			'description' => t('View Forms'),
+		),
+
+		'upload upload_csv' => array(
+			'title' => t('Upload CSV'),
+			'description' => t('Upload Csv file'),
+		),
+	);
+}
+
+//*********** Insert Individual Employee Data **************
+
+function emp_form_my_form($form, &$form_state) {
+	$form['first_name'] = array(
+		'#title' => t('First Name'),
+		'#description' => t('The Employee\'s first name'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+	);
+
+	$form['middle_name'] = array(
+		'#title' => t('Middle Name'),
+		'#description' => t('The Employee\'s Middle Name'),
+		'#type' => 'textfield',
+		'#required' => FALSE,
+	);
+
+	$form['last_name'] = array(
+		'#title' => t('Last Name'),
+		'#description' => t('The Employee\'s Last Name'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+	);
+
+	$form['emp_des'] = array(
+		'#title' => t('Employee Designation'),
+		'#description' => t('The Employee\'s Designation'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+	);
+
+	$form['emp_id'] = array(
+		'#title' => t('Employee ID'),
+		'#description' => t('The Employee\'s ID'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+	);
+
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Save'),
+	);
+
+	return $form;
+}
+
+
+function emp_form_my_form_validate($form, &$form_state) {
+
+}
+
+
+
+function emp_form_my_form_submit($form, &$form_state) {
+	// Here you are use DB Query like insert data of employee in the table
+	db_insert('emp_form_data')
+		->fields(array(
+			'first_name' => $form_state['values']['first_name'],
+			'middle_name' => $form_state['values']['middle_name'],
+			'last_name' => $form_state['values']['last_name'],
+			'emp_des' => $form_state['values']['emp_des'],
+			'emp_id' => $form_state['values']['emp_id'],
+		))
+		->execute();
+
+	drupal_set_message(t('Your Form submitted'));
+}
+
+
+//*********** Upload CSV FILE **************
+
+function upload_csv($form ,&$form_state) {
+
+	$form['csv_upload'] = array(
+	'#type' => 'file',
+	'#title' => t('Choose a csv file'),
+	'#title_display' => 'invisible',
+	'#size' => 22,
+	'#upload_validators' => array('file_clean_name' => array()),
+	);
+
+	$form['upload'] = array(
+		'#type' => 'submit',
+		'#value' => 'Upload',
+	);
+
+	return $form;
+}
+
+function upload_csv_submit($form, &$form_state) {
+	$file = $form_state['values']['csv_upload'];
+	// $file->status = FILE_STATUS_TEMPORARY;
+	$file->filename = str_replace(' ', '_', $file->filename);
+	file_save($file);
+
+	$csv_file = file_load($file->fid);
+	$file = fopen($csv_file->uri, "r");
+    $batch_number = time()."-".rand(1,99);
+    $time_captured = time();
+
+    while(! feof($file))
+    {
+    	$employees = fgetcsv($file);
+			global $user;
+		db_insert('emp_form_data')
+			->fields(array(
+				'emp_id' => $employees[0],
+				'first_name' => $employees[1],
+				'middle_name' => $employees[2],
+				'last_name' => $employees[3],
+				'emp_des' => $employees[4],
+
+			))
+			->execute();
+    }
+    fclose($file);
+    drupal_set_message(t('Your CSV added to database'));
+}
+
+function file_clean_name($file) {
+  $file->filename = str_replace(' ', '_', $file->filename);
+}
+
+function upload_csv_validate($form, &$form_state) {
+		$validators = array('file_validate_extensions' => array('csv'));
+
+	$file = file_save_upload('csv_upload', $validators);
+
+	 if (isset($file)) {
+	 	if ($file) {
+	 		$form_state['values']['csv_upload'] = $file;
+	 	}
+	 	 else {
+      form_set_error('csv_upload', t('The file could not be uploaded.'));
+    }
+  }
+}
+
+
+//*********** View Employee Data **************
+
+function view_emp() {
+
+	$results = db_query("SELECT * FROM {emp_form_data}");
+
+	$header = array(t('Employee ID'), t('Name'), t('Designation'));
+
+	$rows =array();
+
+	foreach($results AS $result) {
+		$rows[] = array(
+			$result->emp_id,
+			$result_full_name = $result->first_name.' '.$result->middle_name.' '.$result->last_name,
+			$result->emp_des,
+		);
+	}
+
+	for ($i ..) {
+		$form[...]
+		$form['items']["delete$i"] array(
+			'#type' => 'submit',
+			'#name' => 'remove$i',
+			'#value' => t('Delete'),
+			'#indx' => $i,
+			'#submit' => ''
+
+		)
+	}
+
+	return theme('table', array('header'=>$header, 'rows'=>$rows));
+}
