@@ -55,7 +55,7 @@ function emp_form_schema() {
 			),
 		
 	),
-		'primary key' => array('tid'),
+		'primary key' => array('tid','emp_id'),
 	);
 	return $schema;
 }
