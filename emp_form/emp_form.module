@@ -164,8 +164,6 @@ function emp_form_my_form_validate($form, &$form_state) {
 
 }
 
-
-
 function emp_form_my_form_submit($form, &$form_state) {
 	// Here you are use DB Query like insert data of employee in the table
 	db_insert('emp_form_data')
@@ -315,9 +313,15 @@ function edit_emp_data($form , &$form_state) {
 
 		$cl = trim(current_path(), '/emp_form/edit');		// Get the Employee ID for Query
 
-		$results = db_query("SELECT * FROM {emp_form_data}");
-
-			$first_name = $results->first_name;
+		$results = db_query("select * from {emp_form_data} where emp_id = $cl");
+		foreach ($results as $result) {
+			$first_name = $result->first_name;
+			$middle_name = $result->middle_name;
+			$last_name = $result->last_name;
+			$emp_des = $result->emp_des;
+			$tid = $result->tid;
+			$emp_id = $result->emp_id;
+		}
 
 
 	$form['first_name'] = array(
@@ -355,9 +359,17 @@ function edit_emp_data($form , &$form_state) {
 	$form['emp_id'] = array(
 		'#title' => t('Employee ID'),
 		'#description' => t('The Employee\'s ID'),
-		'#type' => 'textfield',
-		'#required' => TRUE,
+		'#type' => 'hidden',
+		'#required' => FALSE,
 		'#default_value' => $emp_id,
+	);
+
+	$form['tid'] = array(
+		'#title' => t('Primary Key'),
+		'#description' => t('Serial Number'),
+		'#type' => 'hidden',
+		'#required' => FALSE,
+		'#default_value' => $tid,
 	);
 
 	$form['submit'] = array(
@@ -365,10 +377,27 @@ function edit_emp_data($form , &$form_state) {
 		'#value' => t('Save'),
 	);	
 			
-			
-			
-	drupal_set_message(t($cl));
 	return $form;
+}
+
+function edit_emp_data_submit($form, &$form_state) {
+	// Here you are use DB Query like insert data of employee in the table
+	// 'first_name' => $form_state['values']['first_name'],
+
+	$tid = $form_state['values']['tid'];
+	
+	db_merge('emp_form_data')
+		->key(array('tid' => $tid))
+		->fields(array(
+			'first_name' => $form_state['values']['first_name'],
+			'middle_name' => $form_state['values']['middle_name'],
+			'last_name' => $form_state['values']['last_name'],
+			'emp_des' => $form_state['values']['emp_des'],
+		))
+		->execute();
+
+	drupal_set_message(t('Employee Details is edited'));
+	drupal_goto("/emp_form/view");
 }
 
 //*********** Delete database table as row ****************
