@@ -4,6 +4,9 @@
 	*
 	* @param path
 */
+
+drupal_add_library('system', 'drupal.ajax');
+
 function emp_form_help($path, $arg) {
 	switch ($path) {
 		case "admin/help#emp_form":
@@ -31,7 +34,7 @@ function emp_form_menu() {
 		'type' => MENU_LOCAL_TASK,
 		'description' => 'fill the emp details',
 		'page callback' => 'view_emp',
-		'access arguments' => array('view view_emp'),
+		'access arguments' => array('view view_emp_form'),
 	);
 	$items['emp_form/upload'] = array(
 		'title' => 'Upload CSV File',
@@ -49,8 +52,32 @@ function emp_form_menu() {
 		'type' => MENU_LOCAL_TASK,
 		'description' => 'Order By Employee ID',
 		'page callback' => 'view_emp',
-		'access arguments' => array('view view_emp'),
+		'access arguments' => array('view view_emp_form'),
 	);
+
+		//************ Edit Employee Data By ID *************
+
+		$items['emp_form/edit/%'] = array(
+			'title' => 'Edit Employee Data',
+			'type' => MENU_LOCAL_TASK,
+			'description' => 'Edit Employee By ID',
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('edit_emp_data'),
+			'access arguments' => array('edit emp_form_data_edit'),
+		);
+
+		//*********** Delete Employee Data By ID ************
+
+		$items['emp_form/delete/%'] = array(
+			'title' => 'Delete Employee Data',
+			'type' => MENU_LOCAL_TASK,
+			'description' => 'Delete Employee By ID',
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('delete_emp_data'),
+			'access arguments' => array('delete emp_form_data_delete'),
+			'delivery callback' => 'ajax_deliver',
+		);
+
 
 	return $items;
 }
@@ -72,6 +99,16 @@ function emp_form_permission() {
 		'upload upload_csv' => array(
 			'title' => t('Upload CSV'),
 			'description' => t('Upload Csv file'),
+		),
+
+		'edit emp_form_data_edit' => array(
+			'title' => t('Edit Employee Data'),
+			'description' => t('Edit Employee by ID'),
+		),
+
+		'delete emp_form_data_delete' => array(
+			'title' => t('Delete Employee Data'),
+			'description' => t('Delete Employee Data by ID'),
 		),
 	);
 }
@@ -192,6 +229,7 @@ function upload_csv_submit($form, &$form_state) {
 			->execute();
     }
     fclose($file);
+    file_delete($csv_file);												// Delete Upload file
     drupal_set_message(t('Your CSV added to database'));
 }
 
@@ -221,17 +259,132 @@ function view_emp() {
 
 	$results = db_query("SELECT * FROM {emp_form_data}");
 
-	$header = array(t('Employee ID'), t('Name'), t('Designation'));
+	// $results = db_select('emp_form_data');
+
+	$header = array(t('Employee ID'), t('Name'), t('Designation'), t('Action'));
+
+	// $table_sort = $results->extend('TableSort')
+	// 					->orderByHeader($header);
+
+	// $pager = $table_sort->extend('PagerDefault')
+	// 					->limit(20);
+	// $arr_result = $pager->execute();
 
 	$rows =array();
 
 	foreach($results AS $result) {
+		
 		$rows[] = array(
-			$result->emp_id,
+			$get_emp_id = $result->emp_id,
 			$result_full_name = $result->first_name.' '.$result->middle_name.' '.$result->last_name,
 			$result->emp_des,
+			$action = $edit[] = l(t('Edit'), "emp_form/edit/$get_emp_id").' | '.$delete[] = l(t('Delete'), "emp_form/delete/$get_emp_id").'',
 		);
 	}
 
-	return theme('table', array('header'=>$header, 'rows'=>$rows));
+	$output = '';
+
+	if(!empty($rows)) {
+
+			$output = theme('table', array(
+				'header'=>$header,
+				'rows'=>$rows,
+				'attributes' => array(
+						'id' => 'sort-table'
+				)
+			)
+		);
+			// $output .= theme('pager');
+	}
+
+	else {
+		$output .= t('There is no employees in the list ');
+		$output .= l(t('Click here to add Employee'),"/emp_form/add");
+	}
+
+	
+
+	return $output;
 }
+
+
+//*********** Edit database table as row ****************
+
+
+function edit_emp_data($form , &$form_state) {
+
+		$cl = trim(current_path(), '/emp_form/edit');		// Get the Employee ID for Query
+
+		$results = db_query("SELECT * FROM {emp_form_data}");
+
+			$first_name = $results->first_name;
+
+
+	$form['first_name'] = array(
+		'#title' => t('First Name'),
+		'#description' => t('The Employee\'s first name'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+		'#default_value' => $first_name,
+	);
+
+	$form['middle_name'] = array(
+		'#title' => t('Middle Name'),
+		'#description' => t('The Employee\'s Middle Name'),
+		'#type' => 'textfield',
+		'#required' => FALSE,
+		'#default_value' => $middle_name,
+	);
+
+	$form['last_name'] = array(
+		'#title' => t('Last Name'),
+		'#description' => t('The Employee\'s Last Name'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+		'#default_value' => $last_name,
+	);
+
+	$form['emp_des'] = array(
+		'#title' => t('Employee Designation'),
+		'#description' => t('The Employee\'s Designation'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+		'#default_value' => $emp_des,
+	);
+
+	$form['emp_id'] = array(
+		'#title' => t('Employee ID'),
+		'#description' => t('The Employee\'s ID'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+		'#default_value' => $emp_id,
+	);
+
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Save'),
+	);	
+			
+			
+			
+	drupal_set_message(t($cl));
+	return $form;
+}
+
+//*********** Delete database table as row ****************
+
+
+
+
+function delete_emp_data() {
+		$cl = trim(current_path(), '/emp_form/delete'); 	// Get the Employee ID for Query
+
+			db_delete('emp_form_data')
+				->condition('emp_id', $cl)
+				->execute();
+
+			drupal_set_message(t('Employee is deleted'));
+
+			drupal_goto("/emp_form/view");
+			
+		}
