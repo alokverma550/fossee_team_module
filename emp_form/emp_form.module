@@ -33,9 +33,10 @@ function emp_form_menu() {
 		'title' => 'List of Employee',
 		'type' => MENU_LOCAL_TASK,
 		'description' => 'fill the emp details',
-		'page callback' => 'view_emp',
+		'page callback' => 'view_emp_form',
 		'access arguments' => array('view view_emp_form'),
 	);
+
 	$items['emp_form/upload'] = array(
 		'title' => 'Upload CSV File',
 		'type' => MENU_LOCAL_TASK,
@@ -53,7 +54,7 @@ function emp_form_menu() {
 		'description' => 'Order By Employee ID',
 		'page callback' => 'view_emp',
 		'access arguments' => array('view view_emp_form'),
-	);
+		);
 
 		//************ Edit Employee Data By ID *************
 
@@ -75,7 +76,7 @@ function emp_form_menu() {
 			'page callback' => 'drupal_get_form',
 			'page arguments' => array('delete_emp_data'),
 			'access arguments' => array('delete emp_form_data_delete'),
-			'delivery callback' => 'ajax_deliver',
+			// 'delivery callback' => 'ajax_deliver',
 		);
 
 
@@ -253,7 +254,13 @@ function upload_csv_validate($form, &$form_state) {
 
 //*********** View Employee Data **************
 
-function view_emp() {
+function view_emp_form() {
+
+	// $form['sort'] = array(
+	// 	'#type' => 'submit',
+	// 	'#value' => t('Sort By ID'),
+	// );
+
 
 	$results = db_query("SELECT * FROM {emp_form_data}");
 
@@ -276,7 +283,7 @@ function view_emp() {
 			$get_emp_id = $result->emp_id,
 			$result_full_name = $result->first_name.' '.$result->middle_name.' '.$result->last_name,
 			$result->emp_des,
-			$action = $edit[] = l(t('Edit'), "emp_form/edit/$get_emp_id").' | '.$delete[] = l(t('Delete'), "emp_form/delete/$get_emp_id").'',
+			$action = $edit[] = l('<span>'.t('Edit').'</span>', "emp_form/edit/$get_emp_id",array('attributes' => array('title' => t('Edit Employee.'), 'class' => 'button'), 'html' => 'TRUE')).'| '.$delete[] = l('<span>'.t('Delete').'</span>', "emp_form/delete/$get_emp_id",array('attributes' => array('title' => t('Delete Employee.'), 'class' => 'button'), 'html' => 'TRUE')).'',
 		);
 	}
 
@@ -298,10 +305,11 @@ function view_emp() {
 	else {
 		$output .= t('There is no employees in the list ');
 		$output .= l(t('Click here to add Employee'),"/emp_form/add");
+		$output .= t(' or ');
+		$output .= l(t('Upload CSV'),"/emp_form/upload");
 	}
 
 	
-
 	return $output;
 }
 
@@ -375,7 +383,7 @@ function edit_emp_data($form , &$form_state) {
 	$form['submit'] = array(
 		'#type' => 'submit',
 		'#value' => t('Save'),
-	);	
+	);
 			
 	return $form;
 }
@@ -405,7 +413,7 @@ function edit_emp_data_submit($form, &$form_state) {
 
 
 
-function delete_emp_data() {
+function delete_emp_data_submit($form , &$form_state) {
 		$cl = trim(current_path(), '/emp_form/delete'); 	// Get the Employee ID for Query
 
 			db_delete('emp_form_data')
@@ -415,5 +423,46 @@ function delete_emp_data() {
 			drupal_set_message(t('Employee is deleted'));
 
 			drupal_goto("/emp_form/view");
-			
+}
+
+function delete_emp_data($form , &$form_state) {
+	$cl = trim(current_path(), '/emp_form/delete');
+
+	$header = array(t('Employee ID'), t('Name'), t('Designation'));
+	$rows =array();
+
+	$results = db_query("select * from {emp_form_data} where emp_id = $cl");
+		foreach ($results as $result) {
+			$rows[] = array(
+			$get_emp_id = $result->emp_id,
+			$result_full_name = $result->first_name.' '.$result->middle_name.' '.$result->last_name,
+			$result->emp_des,
+		);
 		}
+
+	$output = theme('table', array('header'=>$header,'rows'=>$rows));
+
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Delete'),
+		'#submit' => array('delete_emp_data_submit'),
+	);
+
+	$form['cancel'] = array(
+		'#type' => 'submit',
+		'#value' => t('Cancel'),
+		'#submit' => array('view_emp_form_cancel'),
+		// '#action' => url('emp_form/view'),
+		// 'page callback' => 'view_emp_form',
+	);
+
+	// return $form;
+
+	return array($form);
+
+}
+
+function view_emp_form_cancel($form ,&$form_state) {
+
+	drupal_goto("/emp_form/view");
+}
