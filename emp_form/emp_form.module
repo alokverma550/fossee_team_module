@@ -256,60 +256,78 @@ function upload_csv_validate($form, &$form_state) {
 
 function view_emp_form() {
 
-	// $form['sort'] = array(
-	// 	'#type' => 'submit',
-	// 	'#value' => t('Sort By ID'),
-	// );
 
 
-	$results = db_query("SELECT * FROM {emp_form_data}");
+	
 
-	// $results = db_select('emp_form_data');
-
-	$header = array(t('Employee ID'), t('Name'), t('Designation'), t('Action'));
-
-	// $table_sort = $results->extend('TableSort')
-	// 					->orderByHeader($header);
-
-	// $pager = $table_sort->extend('PagerDefault')
-	// 					->limit(20);
-	// $arr_result = $pager->execute();
-
-	$rows =array();
-
-	foreach($results AS $result) {
+	if(user_is_anonymous())	{
+		$results = db_query("SELECT * FROM {emp_form_data}");
+		$header = array(t('Employee ID'), t('Name'), t('Designation'));
+		$rows =array();
+		foreach($results AS $result) {
 		
-		$rows[] = array(
-			$get_emp_id = $result->emp_id,
-			$result_full_name = $result->first_name.' '.$result->middle_name.' '.$result->last_name,
-			$result->emp_des,
-			$action = $edit[] = l('<span>'.t('Edit').'</span>', "emp_form/edit/$get_emp_id",array('attributes' => array('title' => t('Edit Employee.'), 'class' => 'button'), 'html' => 'TRUE')).'| '.$delete[] = l('<span>'.t('Delete').'</span>', "emp_form/delete/$get_emp_id",array('attributes' => array('title' => t('Delete Employee.'), 'class' => 'button'), 'html' => 'TRUE')).'',
-		);
-	}
+				$rows[] = array(
+				$get_emp_id = $result->emp_id,
+				$result_full_name = $result->first_name.' '.$result->middle_name.' '.$result->last_name,
+				$result->emp_des,
+				);
+			}
 
-	$output = '';
+			$output = '';
 
-	if(!empty($rows)) {
+				if(!empty($rows)) {
 
-			$output = theme('table', array(
-				'header'=>$header,
-				'rows'=>$rows,
-				'attributes' => array(
+					$output = theme('table', array(
+					'header'=>$header,
+					'rows'=>$rows,
+					'attributes' => array(
 						'id' => 'sort-table'
-				)
-			)
-		);
-			// $output .= theme('pager');
+						)
+					));
+				}
+				else {
+					$output .= t('There is no employees in the list ');
+					$output .= l(t('Click here to add Employee'),"/emp_form/add");
+					$output .= t(' or ');
+					$output .= l(t('Upload CSV'),"/emp_form/upload");
+				}
+
 	}
 
 	else {
-		$output .= t('There is no employees in the list ');
-		$output .= l(t('Click here to add Employee'),"/emp_form/add");
-		$output .= t(' or ');
-		$output .= l(t('Upload CSV'),"/emp_form/upload");
-	}
+			$results = db_query("SELECT * FROM {emp_form_data}");
+			$header = array(t('Employee ID'), t('Name'), t('Designation'), t('Action'));
+			$rows =array();
+			foreach($results AS $result) {
+		
+				$rows[] = array(
+				$get_emp_id = $result->emp_id,
+				$result_full_name = $result->first_name.' '.$result->middle_name.' '.$result->last_name,
+				$result->emp_des,
+				$action = $edit[] = l('<span>'.t('Edit').'</span>', "emp_form/edit/$get_emp_id",array('attributes' => array('title' => t('Edit Employee.'), 'class' => 'button'), 'html' => 'TRUE')).'| '.$delete[] = l('<span>'.t('Delete').'</span>', "emp_form/delete/$get_emp_id",array('attributes' => array('title' => t('Delete Employee.'), 'class' => 'button'), 'html' => 'TRUE')).'',
+				);
+			}
 
-	
+			$output = '';
+
+				if(!empty($rows)) {
+
+					$output = theme('table', array(
+					'header'=>$header,
+					'rows'=>$rows,
+					'attributes' => array(
+						'id' => 'sort-table'
+						)
+					));
+				}
+				else {
+					$output .= t('There is no employees in the list ');
+					$output .= l(t('Click here to add Employee'),"/emp_form/add");
+					$output .= t(' or ');
+					$output .= l(t('Upload CSV'),"/emp_form/upload");
+				}
+
+	}
 	return $output;
 }
 
