@@ -8,3 +8,5 @@ package = Employee Form
 files[] = emp_form.info
 files[] = emp_form.install
 files[] = emp_form.module
+
+dependencies[] = date_popup
