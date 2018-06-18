@@ -22,26 +22,12 @@ function emp_form_schema() {
 			'emp_id' => array(
 			'description' => t('Employee Code'),
 			'type' => 'varchar',
-			'length' => 64,
+			'length' => 255,
 			'not null' => TRUE,
 			),
 
-			'first_name' => array(
-			'description' => t('Employee\'s first name.'),
-			'type' => 'varchar',
-			'length' => 64,
-			'not null' => TRUE,
-			),
-
-			'middle_name' => array(
-			'description' => t('Employee\'s middle name.'),
-			'type' => 'varchar',
-			'length' => 64,
-			'not null' => TRUE,
-			),
-
-			'last_name' => array(
-			'description' => t('Employee\'s last name.'),
+			'emp_name' => array(
+			'description' => t('Employee\'s Employee name.'),
 			'type' => 'varchar',
 			'length' => 64,
 			'not null' => TRUE,
@@ -53,7 +39,34 @@ function emp_form_schema() {
 			'length' => 64,
 			'not null' => TRUE,
 			),
-		
+
+			'team_name' => array(
+			'description' => t('Employee\'s Team Name'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => TRUE,
+			),
+
+			'join_date' => array(
+			'description' => t('Employee\'s Joining Date'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => FALSE,
+			),
+
+			'leave_date' => array(
+			'description' => t('Employee\'s Leaving Date'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => FALSE,
+			),
+
+			'status' => array(
+			'description' => t('Employee\'s Status'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => TRUE,
+			),
 	),
 		'primary key' => array('tid','emp_id'),
 	);
