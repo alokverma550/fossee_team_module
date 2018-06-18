@@ -301,7 +301,7 @@ function upload_csv_submit($form, &$form_state) {
     foreach($csv->data as $i=>$record)
     {   
         if($record['emp_id'] == NULL or $record['emp_id'] == '') {
-        	drupal_set_message(t('No Employee ID in CSV'),'error');
+        	drupal_set_message(t('No Employee Name in CSV'),'error');
             return;
             }	// $record['starttime'] = "00:00";
         else if($record['emp_name'] == NULL or $record['emp_name'] == '') {
@@ -563,7 +563,6 @@ function view_emp_form() {
 			}
 
 
-			// if( ($emp_name_sort ==  '') && ($emp_id_sort == '') && ($emp_des_sort == '') && ($emp_join_date_sort == '') && ($emp_leave_date_sort == '') )
 			if( $emp_id_sort == NULL and $emp_name_sort == NULL and $emp_des_sort == NULL and $emp_team_name_sort == NULL and $emp_join_date_sort == NULL and $emp_leave_date_sort == NULL and $emp_status_sort == NULL )
 			{
 				$results = db_query("SELECT * FROM {emp_form_data}");
