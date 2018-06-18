@@ -268,7 +268,7 @@ function upload_csv_validate($form, &$form_state) {
         	drupal_set_message(t("Multiple values for field ".$key), 'error');
         	$form_state['csv_error_flag'] = TRUE;
         }
-        else if($value == 0 and !in_array($key, array('emp_id', 'emp_name', 'join_date')))
+        else if($value == 0 and !in_array($key, array('emp_id', 'emp_name', 'emp_des', 'team_name', 'join_date', 'leave_date', 'status')))
            { drupal_set_message(t("Field ".$key." is missing"), 'error'); $form_state['csv_error_flag'] = TRUE; }
     }
 
@@ -281,7 +281,7 @@ function upload_csv_validate($form, &$form_state) {
     {
         foreach($row as $key=>$value)
         {
-            if( !in_array($key, array('emp_id', 'emp_name', 'join_date')) and ($value == '' or $value == NULL))
+            if( !in_array($key, array('emp_id', 'emp_name', 'status')) and ($value == '' or $value == NULL))
                 { drupal_set_message(t("Missing value for field '".$key."' in row ".($rno+1)), 'error'); $form_state['csv_error_flag'] = TRUE; }
         }
     }
@@ -300,10 +300,14 @@ function upload_csv_submit($form, &$form_state) {
 
     foreach($csv->data as $i=>$record)
     {   
-        if($record['emp_id'] == NULL or $record['emp_id'] == '')
-            return;	// $record['starttime'] = "00:00";
-        else if($record['emp_name'] == NULL or $record['emp_name'] == '')
+        if($record['emp_id'] == NULL or $record['emp_id'] == '') {
+        	drupal_set_message(t('No Employee ID in CSV'),'error');
+            return;
+            }	// $record['starttime'] = "00:00";
+        else if($record['emp_name'] == NULL or $record['emp_name'] == '') {
+            drupal_set_message(t('No Employee Name in CSV'),'warning');
             return;	// $record['endtime'] = "00:00";
+        }
         $insertquery->values($record);
     }
     $insertquery->execute();
