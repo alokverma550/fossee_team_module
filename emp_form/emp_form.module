@@ -318,9 +318,268 @@ function upload_csv_submit($form, &$form_state) {
 
 function view_emp_form() {
 
+	$asc_img = base_path() .'misc/arrow-asc.png';
+	$desc_img = base_path() .'misc/arrow-desc.png';
+	
 	if(user_is_anonymous())	{
-		$results = db_query("SELECT * FROM {emp_form_data}");
-		$header = array(t('Employee ID'), t('Name'), t('Designation'), t('Team Name'), t('Joining Date'), t('Leaving Date'), t('Status'));
+		// $results = db_query("SELECT * FROM {emp_form_data}");
+		// $header = array(t('Employee ID'), t('Name'), t('Designation'), t('Team Name'), t('Joining Date'), t('Leaving Date'), t('Status'));
+
+
+
+		//**************************** SORT BY EMPLOYEE ID ****************************
+		
+			
+			$emp_id_sort = trim(current_path(), '/emp_form/view/');
+			if($emp_id_sort == 'sortby/emp_id/ASC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_id` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_id/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Employee ID'),"emp_form/view/sortby/emp_id/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
+				$header = array(
+					// l(t('Employee ID'),"emp_form/view/sortby/emp_id/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+			if($emp_id_sort == 'sortby/emp_id/DESC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_id` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_id/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
+				$header = array(
+					// l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+
+
+			//**************************** SORT BY EMPLOYEE NAME ****************************
+
+			$emp_name_sort = trim(current_path(), '/emp_form/view');
+			if($emp_name_sort == 'sortby/emp_name/ASC') {
+				
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_name` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_name/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Name'),"emp_form/view/sortby/emp_name/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Name'),"emp_form/view/sortby/emp_name/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+			if($emp_name_sort == 'sortby/emp_name/DESC') {
+				
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_name` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_name/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+
+
+			//**************************** SORT BY EMPLOYEE DESIGNATION ****************************
+
+			$emp_des_sort = trim(current_path(), '/emp_form/view/');
+			if($emp_des_sort == 'sortby/emp_des/ASC') {
+				
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_des` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_des/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Designation'),"emp_form/view/sortby/emp_des/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Designation'),"emp_form/view/sortby/emp_des/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+			if($emp_des_sort == 'sortby/emp_des/DESC') {
+				
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_des` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_des/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					// l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+
+
+			// ******************************* SORT BY EMPLOYEE TEAM NAME  ****************************
+
+
+			$emp_team_name_sort = trim(current_path(), '/emp_form/view');
+			if($emp_team_name_sort == 'sortby/emp_team_name/ASC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `team_name` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_team_name/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Team Name'),"emp_form/view/sortby/emp_team_name/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Team Name'),"emp_form/view/sortby/emp_team_name/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+			if($emp_team_name_sort == 'sortby/emp_team_name/DESC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `team_name` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_team_name/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+
+
+			//**************************** SORT BY EMPLOYEE JOINING DATE ****************************
+
+
+			$emp_join_date_sort = trim(current_path(), '/emp_form/view');
+			if($emp_join_date_sort == 'sortby/emp_join_date/ASC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `join_date` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_join_date/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					// l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+			if($emp_join_date_sort == 'sortby/emp_join_date/DESC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `join_date` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_join_date/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+
+
+			//**************************** SORT BY EMPLOYEE LEAVING DATE ****************************
+
+
+			$emp_leave_date_sort = trim(current_path(), '/emp_form/view');
+			if($emp_leave_date_sort == 'sortby/emp_leave_date/ASC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `leave_date` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_leave_date/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+			if($emp_leave_date_sort == 'sortby/emp_leave_date/DESC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `leave_date` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_leave_date/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+
+			//**************************** SORT BY EMPLOYEE STATUS ****************************
+
+			$emp_status_sort = trim(current_path(), '/emp_form/view');
+			if($emp_leave_date_sort == 'sortby/status/ASC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `status` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/status/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Status'),"emp_form/view/sortby/status/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by DESC')))),
+					// l(t('Status'),"emp_form/view/sortby/status/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg);
+			}
+			if($emp_status_sort == 'sortby/status/DESC') {
+				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `status` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/status/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					// l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg);
+			}
+
+
+			if( $emp_id_sort == NULL and $emp_name_sort == NULL and $emp_des_sort == NULL and $emp_team_name_sort == NULL and $emp_join_date_sort == NULL and $emp_leave_date_sort == NULL and $emp_status_sort == NULL )
+			{
+				$results = db_query("SELECT * FROM {emp_form_data}");
+				$header = array(
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))));
+			}
+
+
+
 		$rows =array();
 		foreach($results AS $result) {
 		
@@ -343,12 +602,10 @@ function view_emp_form() {
 					'header'=>$header,
 					'rows'=>$rows,
 					));
+					$output .= l(t('Back to View'),"/emp_form/view");
 				}
 				else {
 					$output .= t('There is no employees in the list ');
-					$output .= l(t('Click here to add Employee'),"/emp_form/add");
-					$output .= t(' or ');
-					$output .= l(t('Upload CSV'),"/emp_form/upload");
 				}
 
 	}
@@ -356,11 +613,15 @@ function view_emp_form() {
 	else {
 
 			//**************************** SORT BY EMPLOYEE ID ****************************
+			
 			$emp_id_sort = trim(current_path(), '/emp_form/view/');
 			if($emp_id_sort == 'sortby/emp_id/ASC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_id` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_id/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Employee ID'),"emp_form/view/sortby/emp_id/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
 				$header = array(
-					l(t('Employee ID'),"emp_form/view/sortby/emp_id/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					// l(t('Employee ID'),"emp_form/view/sortby/emp_id/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -371,8 +632,11 @@ function view_emp_form() {
 			}
 			if($emp_id_sort == 'sortby/emp_id/DESC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_id` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_id/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
 				$header = array(
-					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					// l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -389,9 +653,12 @@ function view_emp_form() {
 			if($emp_name_sort == 'sortby/emp_name/ASC') {
 				
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_name` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_name/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Name'),"emp_form/view/sortby/emp_name/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
 				$header = array(
-					l(t('Employee ID'),"emp_form/view/sortby/emp_id/DESC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Name'),"emp_form/view/sortby/emp_name/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Name'),"emp_form/view/sortby/emp_name/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -402,9 +669,12 @@ function view_emp_form() {
 			if($emp_name_sort == 'sortby/emp_name/DESC') {
 				
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_name` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_name/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -420,10 +690,13 @@ function view_emp_form() {
 			if($emp_des_sort == 'sortby/emp_des/ASC') {
 				
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_des` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_des/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Designation'),"emp_form/view/sortby/emp_des/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Designation'),"emp_form/view/sortby/emp_des/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Designation'),"emp_form/view/sortby/emp_des/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -433,10 +706,13 @@ function view_emp_form() {
 			if($emp_des_sort == 'sortby/emp_des/DESC') {
 				
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `emp_des` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_des/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					// l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -451,11 +727,14 @@ function view_emp_form() {
 			$emp_team_name_sort = trim(current_path(), '/emp_form/view');
 			if($emp_team_name_sort == 'sortby/emp_team_name/ASC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `team_name` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_team_name/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Team Name'),"emp_form/view/sortby/emp_team_name/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Team Name'),"emp_form/view/sortby/emp_team_name/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -463,11 +742,14 @@ function view_emp_form() {
 			}
 			if($emp_team_name_sort == 'sortby/emp_team_name/DESC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `team_name` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_team_name/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -481,24 +763,30 @@ function view_emp_form() {
 			$emp_join_date_sort = trim(current_path(), '/emp_form/view');
 			if($emp_join_date_sort == 'sortby/emp_join_date/ASC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `join_date` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_join_date/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					// l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					t('Action'));
 			}
 			if($emp_join_date_sort == 'sortby/emp_join_date/DESC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `join_date` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_join_date/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					t('Action'));
@@ -511,25 +799,31 @@ function view_emp_form() {
 			$emp_leave_date_sort = trim(current_path(), '/emp_form/view');
 			if($emp_leave_date_sort == 'sortby/emp_leave_date/ASC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `leave_date` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/emp_leave_date/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
 					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					t('Action'));
 			}
 			if($emp_leave_date_sort == 'sortby/emp_leave_date/DESC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `leave_date` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/emp_leave_date/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Designation'),"emp_form/view/sortby/emp_des/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
+					// l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					t('Action'));
 			}
@@ -539,6 +833,8 @@ function view_emp_form() {
 			$emp_status_sort = trim(current_path(), '/emp_form/view');
 			if($emp_leave_date_sort == 'sortby/status/ASC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `status` ASC");
+				$simg = l("<img src=$asc_img>","emp_form/view/sortby/status/DESC",$options = array('html' => TRUE));
+				$limg = l(t('Status'),"emp_form/view/sortby/status/DESC",array('attributes' => array('title' => t('Sort by DESC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -546,11 +842,14 @@ function view_emp_form() {
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by DESC')))),
-					l(t('Status'),"emp_form/view/sortby/status/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					// l(t('Status'),"emp_form/view/sortby/status/DESC",array('attributes' => array('title' => t('Sort by DESC')))),
+					$mimg = $limg.' '.$simg,
 					t('Action'));
 			}
 			if($emp_status_sort == 'sortby/status/DESC') {
 				$results = db_query("SELECT * FROM {emp_form_data} ORDER BY `status` DESC");
+				$simg = l("<img src=$desc_img>","emp_form/view/sortby/status/ASC",$options = array('html' => TRUE));
+				$limg = l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC'))));
 				$header = array(
 					l(t('Employee ID'),"emp_form/view/sortby/emp_id/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Name'),"emp_form/view/sortby/emp_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
@@ -558,7 +857,8 @@ function view_emp_form() {
 					l(t('Team Name'),"emp_form/view/sortby/emp_team_name/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Joining Date'),"emp_form/view/sortby/emp_join_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
 					l(t('Leaving Date'),"emp_form/view/sortby/emp_leave_date/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
-					l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					// l(t('Status'),"emp_form/view/sortby/status/ASC",array('attributes' => array('title' => t('Sort by ASC')))),
+					$mimg = $limg.' '.$simg,
 					t('Action'));
 			}
 
