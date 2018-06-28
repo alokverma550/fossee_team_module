@@ -67,6 +67,13 @@ function emp_form_schema() {
 			'length' => 64,
 			'not null' => TRUE,
 			),
+
+			'update_emp_data_time' => array(
+			'description' => t('Employee\'s Update time'),
+			'type' => 'varchar',
+			'length' => 64,
+			'not null' => FALSE,
+			),
 	),
 		'primary key' => array('tid','emp_id'),
 	);
