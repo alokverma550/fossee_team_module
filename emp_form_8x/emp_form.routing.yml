@@ -1,0 +1,39 @@
+emp_form.form:
+  path: 'emp_form/add'
+  defaults:
+    _form: '\Drupal\emp_form\Form\EmpForm'
+    _title: 'Employee Form'
+  requirements:
+    _permission: 'submit emp_form'
+
+emp_form.content:
+  path: 'emp_form/view'
+  defaults:
+    _controller: '\Drupal\emp_form\Controller\EmpformviewController::content'
+    _title: 'List of Employee'
+  requirements:
+    _permission: 'view view_emp_form'
+
+emp_form.form.edit:
+  path: 'emp_form/edit'
+  defaults:
+    _form: '\Drupal\emp_form\Form\EmpformEdit'
+    _title: 'Edit Employee Details'
+  requirements:
+    _permission: 'edit emp_form_data_edit'
+
+emp_form.form.delete:
+  path: 'emp_form/delete'
+  defaults:
+    _form: '\Drupal\emp_form\Form\EmpformDelete'
+    _title: 'Delete Employee Details'
+  requirements:
+    _permission: 'delete emp_form_data_delete'
+
+emp_form.form.upload:
+  path: 'emp_form/upload'
+  defaults:
+    _form: '\Drupal\emp_form\Form\EmpformUpload'
+    _title: 'Upload CSV File'
+  requirements:
+    _permission: 'upload upload_csv'

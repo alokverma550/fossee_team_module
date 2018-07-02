@@ -1,0 +1,24 @@
+'submit emp_form':
+  title: 'Submit Employee Form'
+  description: 'Add new Employee Data.'
+  restrict access: false
+
+'view view_emp_form':
+  title: 'View Form'
+  description: 'View Forms.'
+  restrict access: false
+
+'upload upload_csv':
+  title: 'Upload CSV'
+  description: 'Add Employee Data from CSV File.'
+  restrict access: false
+
+'edit emp_form_data_edit':
+  title: 'Edit Employee Data'
+  description: 'Edit Employee Data by ID'
+  restrict access: false
+
+'delete emp_form_data_delete':
+  title: 'Delete Employee Data'
+  description: 'Delete Employee Data by ID'
+  restrict access: true

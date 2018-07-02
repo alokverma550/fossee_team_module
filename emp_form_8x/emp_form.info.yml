@@ -1,0 +1,10 @@
+name: Employee Form
+description: Add details of employee details
+core: 8.x
+package: Employee Form
+type: module
+
+# List of files included in the module
+
+dependencies:
+  - drupal:datetime
