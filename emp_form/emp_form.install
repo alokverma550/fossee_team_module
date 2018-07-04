@@ -26,6 +26,13 @@ function emp_form_schema() {
 			'not null' => TRUE,
 			),
 
+			'profile_url' => array(
+			'description' => t('Employee Profile URL'),
+			'type' => 'varchar',
+			'length' => 511,
+			'not null' => TRUE,
+			),
+
 			'emp_name' => array(
 			'description' => t('Employee\'s Employee name.'),
 			'type' => 'varchar',
