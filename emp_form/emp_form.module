@@ -113,6 +113,13 @@ function emp_form_my_form($form, &$form_state) {
 		'#required' => TRUE,
 	);
 
+	$form['profile_url'] = array(
+		'#title' => t('Employee Profile URL'),
+		'#description' => t('The Employee\'s Profile URL'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+	);
+
 	$form['emp_name'] = array(
 		'#title' => t('Employee Name'),
 		'#description' => t('The Employee\'s name'),
@@ -195,6 +202,7 @@ function emp_form_my_form_submit($form, &$form_state) {
 				'emp_name' => $form_state['values']['emp_name'],
 				'emp_des' => $form_state['values']['emp_des'],
 				'emp_id' => $form_state['values']['emp_id'],
+				'profile_url' => $form_state['values']['profile_url'],
 				'team_name' => $form_state['values']['team_name'],
 				'join_date' => $form_state['values']['join_date'],
 				'leave_date' => $form_state['values']['leave_date'],
@@ -246,7 +254,7 @@ function upload_csv_validate($form, &$form_state) {
 
 		$csv = new ParseCsv\Csv($file_path);
 		// Check CSV HEADER
-		$std_header = array('emp_id' => 0, 'emp_name' => 0, 'emp_des' => 0, 'team_name' => 0, 'join_date' => 0, 'leave_date' => 0, 'status' => 0);
+		$std_header = array('emp_id' => 0, 'emp_name' => 0, 'emp_des' => 0, 'team_name' => 0, 'join_date' => 0, 'leave_date' => 0, 'status' => 0, 'profile_url' => 0);
 
 		$user_header = array_keys($csv->data[0]);
 
@@ -265,7 +273,7 @@ function upload_csv_validate($form, &$form_state) {
         	drupal_set_message(t("Multiple values for field ".$key), 'error');
         	$form_state['csv_error_flag'] = TRUE;
         }
-        else if($value == 0 and !in_array($key, array('emp_team', 'join_date', 'leave_date', 'emp_des')))
+        else if($value == 0 and !in_array($key, array('emp_team', 'join_date', 'leave_date', 'emp_des', 'profile_url')))
            { drupal_set_message(t("Field ".$key." is missing"), 'error'); $form_state['csv_error_flag'] = TRUE; }
     }
 
@@ -278,7 +286,7 @@ function upload_csv_validate($form, &$form_state) {
     {
         foreach($row as $key=>$value)
         {
-            if( !in_array($key, array('emp_team', 'join_date', 'leave_date', 'emp_des')) and ($value == '' or $value == NULL)) {
+            if( !in_array($key, array('emp_team', 'join_date', 'leave_date', 'emp_des', 'profile_url')) and ($value == '' or $value == NULL)) {
             	drupal_set_message(t("Missing value for field '".$key."' in row ".($rno+1)), 'error');
             	$form_state['csv_error_flag'] = TRUE;
             }
@@ -984,6 +992,7 @@ function edit_emp_data($form , &$form_state) {
 			$join_date = $result->join_date;
 			$leave_date = $result->leave_date;
 			$status = $result->status;
+			$profile_url = $result->profile_url;
 
 			
 		}
@@ -996,6 +1005,14 @@ function edit_emp_data($form , &$form_state) {
 		'#type' => 'textfield',
 		'#required' => TRUE,
 		'#default_value' => $emp_id,
+	);
+
+	$form['profile_url'] = array(
+		'#title' => t('Employee Profile URL'),
+		'#description' => t('The Employee\'s Profile URL'),
+		'#type' => 'textfield',
+		'#required' => TRUE,
+		'#default_value' => $profile_url,
 	);
 
 	$form['emp_name'] = array(
@@ -1091,6 +1108,7 @@ function edit_emp_data_submit($form, &$form_state) {
 				->key(array('tid' => $tid))
 				->fields(array(
 					'emp_id' => $form_state['values']['emp_id'],
+					'profile_url' => $form_state['values']['profile_url'],
 					'emp_name' => $form_state['values']['emp_name'],
 					'emp_des' => $form_state['values']['emp_des'],
 					'team_name' => $form_state['values']['team_name'],
