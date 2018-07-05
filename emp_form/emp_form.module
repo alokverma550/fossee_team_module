@@ -117,7 +117,7 @@ function emp_form_my_form($form, &$form_state) {
 		'#title' => t('Employee Profile URL'),
 		'#description' => t('The Employee\'s Profile URL'),
 		'#type' => 'textfield',
-		'#required' => TRUE,
+		'#required' => FALSE,
 	);
 
 	$form['emp_name'] = array(
@@ -993,8 +993,6 @@ function edit_emp_data($form , &$form_state) {
 			$leave_date = $result->leave_date;
 			$status = $result->status;
 			$profile_url = $result->profile_url;
-
-			
 		}
 
 	if($emp_id == $cl) {
@@ -1011,7 +1009,7 @@ function edit_emp_data($form , &$form_state) {
 		'#title' => t('Employee Profile URL'),
 		'#description' => t('The Employee\'s Profile URL'),
 		'#type' => 'textfield',
-		'#required' => TRUE,
+		'#required' => FALSE,
 		'#default_value' => $profile_url,
 	);
 
